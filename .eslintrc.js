@@ -1,10 +1,8 @@
 module.exports = {
   "extends": "eslint:recommended",
   "env": {
-  	node: true
-  },
-  "parserOptions": {
-    "ecmaVersion": 6
+  	node: true,
+  	es6: true
   },
   "rules": {
     "no-console": 0,
