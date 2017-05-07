@@ -1,5 +1,11 @@
 module.exports = {
-  "extends": "airbnb-base",
+  "extends": "eslint:recommended",
+  "env": {
+  	node: true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
   "rules": {
     "no-console": 0,
     "func-names": 0,
@@ -7,5 +13,5 @@ module.exports = {
     "indent":0,
     "prefer-arrow-callback":0,
     "linebreak-style":0
-  }
+  } 
 }
