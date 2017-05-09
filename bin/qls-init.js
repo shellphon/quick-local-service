@@ -13,7 +13,8 @@ function pathString(str) {
 
 fs.writeFile(defConf, `module.exports = {
 	port:10086,
-	dir:"${pathString(cwd)}"
+	dir:"${pathString(cwd)}",
+	proxy:{}
 }`, function (err) {
 	if (err) {
 		console.error(err);
