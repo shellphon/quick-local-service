@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Index</title>
+	<script src="//cdn.bootcss.com/jquery/1.10.0/jquery.min.js"></script>
+</head>
+<body>
+	<p>Hello, I'm proxy!</p>
+	<p id="res"></p>
+	<button id="btn">Click me to get something</button>
+	<button id="pBtn">Click me to post something</button>
+	<button id="btn-other">Click me to get another something</button>
+	<button id="pBtn-other">Click me to post another something</button>
+	<script>
+		$(function(){
+			$('#btn').click(function(){
+				$.ajax({
+					url:'/api/test',
+					method:'get',
+					data:{
+						name:'shell'
+					},
+					success:function(res){
+						$('#res').html(res);
+					}
+				});
+			});
+			$('#pBtn').click(function(){
+				$.ajax({
+					url:'/api/test',
+					method:'post',
+					data:{
+						name:'shell'
+					},
+					success:function(res){
+						$('#res').html(res);
+					}
+				});
+			});
+			$('#btn-other').click(function(){
+				$.ajax({
+					url:'/kik/test',
+					method:'get',
+					data:{
+						name:'shell'
+					},
+					success:function(res){
+						$('#res').html(res);
+					}
+				});
+			});
+			$('#pBtn-other').click(function(){
+				$.ajax({
+					url:'/kik/test',
+					method:'post',
+					data:{
+						name:'shell'
+					},
+					success:function(res){
+						$('#res').html(res);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>
