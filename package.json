@@ -1,6 +1,6 @@
 {
   "name": "quick-local-service",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "quick start local static service for web front end dev",
   "main": "index.js",
   "scripts": {
