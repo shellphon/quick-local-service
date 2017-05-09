@@ -53,9 +53,29 @@ module.exports = {
 ```bash
 $ qls run -c other.config.js
 ```
+### 配置跨域接口代理
+
+在配置文件内 `qls.config.js`，定义proxy字段，例如：
+
+```
+module.exports = {
+	port: 10086,
+	dir: '',
+	proxy:{
+		'/api':{
+			host:'http://127.0.0.1:8910',
+			pathRewrite:{
+				'^/api': '/api'
+			}
+		}
+	}
+}
+```
+
+在本项目的example目录有示例. (html/proxy.html [qls run], service/other-proxy.js [node other-proxy.js])
 
 ### Todo:
 
 1. 配置模拟接口
-2. 代理跨域接口
-3. 识别端口被占用的情况
+2. [完成] 代理跨域接口
+3. [完成] 识别端口被占用的情况

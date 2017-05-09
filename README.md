@@ -14,7 +14,7 @@ When you programed a page name index.html\other.html, you can use quick-local-se
 $ npm install quick-local-service -g
 ```
 
-#### come to the page directory and run the service
+#### Arrive the page directory and run the service
 
 ```bash
 $ cd demo
@@ -42,7 +42,8 @@ This is the content of `qls.config.js`.
 ```javascript
 module.exports = {
 	port:10086,
-	dir:""
+	dir:"",
+	proxy:{}
 }
 ```
 
@@ -54,8 +55,30 @@ Also, you can tell `qls` to use another custom config file by option '-c other.c
 $ qls run -c other.config.js
 ```
 
+### config file for proxy cross-domain interface
+
+in `qls.config.js`
+
+```
+module.exports = {
+	port: 10086,
+	dir: '',
+	proxy:{
+		'/api':{
+			host:'http://127.0.0.1:8910',
+			pathRewrite:{
+				'^/api': '/api'
+			}
+		}
+	}
+}
+```
+
+You can see the example directory. (html/proxy.html [qls run], service/other-proxy.js [node other-proxy.js]) 
+
+
 ### Todo:
 
 1. Interface setting for the ajax request in the page.
-2. Proxy the cross-domain interface.
-3. Stop running if the port is used already.
+2. [Done] Proxy the cross-domain interface.
+3. [Done] Stop running if the port is used already.
