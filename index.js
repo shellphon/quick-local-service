@@ -23,7 +23,8 @@ QLS.fn.init.prototype = QLS.prototype;
 QLS.prototype.run = function (option) {
 	var urlPrefix,
 		urlPrefixReg;
-	
+	var ctx = this;
+
 	if (!option) {
 		console.error('Option required!');
 		return;
@@ -46,6 +47,7 @@ QLS.prototype.run = function (option) {
 			for(urlPrefix in option.proxy){
 				//option.proxy.hasOwnProperty(key))
 				let pathRewrite = option.proxy[urlPrefix].pathRewrite;
+
 				let proxyExample = [
 					"proxy:{",
 					"	'/api':{",
@@ -69,6 +71,9 @@ QLS.prototype.run = function (option) {
 							var res = urlPath;
 							if(pathRewrite){
 								for(var org in pathRewrite){
+									if(pathRewrite[org]=='/'){
+										pathRewrite[org] = '';
+									}
 									res = res.replace(new RegExp(org), pathRewrite[org]);
 								}
 								return res;
@@ -84,6 +89,9 @@ QLS.prototype.run = function (option) {
 							var res = urlPath;
 							if(pathRewrite){
 								for(var org in pathRewrite){
+									if(pathRewrite[org]=='/'){
+										pathRewrite[org] = '';
+									}
 									res = res.replace(new RegExp(org), pathRewrite[org]);
 								}
 								return res;
@@ -101,6 +109,9 @@ QLS.prototype.run = function (option) {
 		app.use(serve(option.dir));
 		app.listen(option.port, function () {
 			console.log(`service started\n port: ${option.port} , dir:${option.dir}`);
+			if(option.cbk && typeof option.cbk == 'function'){
+				option.cbk.call(ctx);
+			}
 		});
 	},function(res){
 		res.status && console.error(res.desc);
