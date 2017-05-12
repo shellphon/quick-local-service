@@ -7,6 +7,13 @@ var superagent = require('supertest');
 
 var path = require('path');
 
+var autoPort = {
+	port:10086,
+	getPort:function(){
+		return this.port++;
+	}
+};
+
 describe("quick local service", function() {
 	
 	it("QLS() should be instance of QLS", function() {
@@ -14,49 +21,54 @@ describe("quick local service", function() {
 	});
 
 	it("QLS().run() with option port and dir should run the service", function(done) {
+		var port = autoPort.getPort();
 		qls.run({
-			port:10086,
+			port: port,
 			dir: path.resolve(__dirname, '../example/html'),
-			cbk: function(){
-				superagent('http://127.0.0.1:10086')
+			cbk: function(app){
+				superagent('http://127.0.0.1:'+port)
 					.get('/')
-					.expect(200, done);
+					.expect(200)
+					.end(function(){
+						done();
+						app.close();
+					});
 			}
 		})
 	});
 
-	it("QLS().run() with proxy should run the service", function(done) {
-		var interface = new Promise(function(resolve, reject){
-			try {
+	it("proxy get request", function(done) {
+		var proxyPort = autoPort.getPort(),
+			serverPort = autoPort.getPort();
+		var app = require('koa')();
+		var router = require('koa-router')();
 
-				QLS().run({
-					port:10087,
-					dir: path.resolve(__dirname, '../example/json'),
-					cbk:function(){
-						//console.log('resolve');
-						resolve();
-					}
-				});
-			}catch(err){
-				done();
-			}
+		router.get('/api/test',function *(next){
+			this.body = {"result":1};
 		});
+		app.use(router.routes());
 
+		var interface = new Promise(function(resolve,reject){
+			app.listen(proxyPort, function(){
+				console.log('proxy server start:'+proxyPort);
+				resolve();
+			});
+		});
 		interface.then(function(){
 			qls.run({
-				port:10085,
+				port: serverPort,
 				dir: path.resolve(__dirname, '../example/html'),
 				proxy:{
 					'/api':{
-						host:'http://127.0.0.1:10087',
+						host:'http://127.0.0.1:' + proxyPort,
 						pathRewrite:{
-							'^/api':'/'
+							'^/api':'/api'
 						}
 					}
 				},
 				cbk: function(){
-					superagent('http://127.0.0.1:10085')
-						.get('/api/test.json')
+					superagent('http://127.0.0.1:' + serverPort)
+						.get('/api/test')
 						.expect(200, done);
 				}
 			});

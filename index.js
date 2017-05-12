@@ -110,7 +110,7 @@ QLS.prototype.run = function (option) {
 		app.listen(option.port, function () {
 			console.log(`service started\n port: ${option.port} , dir:${option.dir}`);
 			if(option.cbk && typeof option.cbk == 'function'){
-				option.cbk.call(ctx);
+				option.cbk.call(ctx, app);
 			}
 		});
 	},function(res){
