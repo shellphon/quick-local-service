@@ -36,6 +36,55 @@ describe("quick local service", function() {
 			}
 		})
 	});
+});
+
+describe("quick local service proxy",function(){
+	
+	it("QLS().run() with proxy should proxy the post request", function(done) {
+		var proxyPort = autoPort.getPort(),
+			serverPort = autoPort.getPort();
+		var app = require('koa')();
+		var router = require('koa-router')();
+		router.post('/api/hello', function *(next){
+			this.body = {"res":1};
+		});
+
+		router.get('/api/test',function *(next){
+			this.body = {"result":1};
+		});
+		app.use(router.routes());
+
+		var interface = new Promise(function(resolve,reject){
+			app.listen(proxyPort, function(){
+				console.log('proxy server start:'+proxyPort);
+				resolve();
+			});
+		});
+
+		interface.then(function(){
+			qls.run({
+				port: serverPort,
+				dir: path.resolve(__dirname, '../example/html'),
+				proxy:{
+					'/api':{
+						host:'http://127.0.0.1:' + proxyPort,
+						pathRewrite:{
+							'^/api':'/api'
+						}
+					}
+				},
+				cbk: function(){
+					
+					superagent('http://127.0.0.1:' + serverPort)
+						.post('/api/hello')
+						//.get('/api/test')
+						.expect(200, done);
+				}
+			});
+		}).catch(function(){
+			done();
+		});
+	});
 
 	it("proxy get request", function(done) {
 		var proxyPort = autoPort.getPort(),
@@ -74,5 +123,4 @@ describe("quick local service", function() {
 			});
 		});
 	});
-
 });
