@@ -3,6 +3,8 @@ const program = require('commander');
 
 const QLS = require('../index.js')();
 
+const Log = require('../util/log');
+
 var options = {}; // eslint-disable-line
 
 var error = false; // eslint-disable-line
@@ -35,13 +37,13 @@ function moduleAvailable(name) {
 if (program.config) {
 	options = require(path.resolve(cwd, program.config)); // eslint-disable-line
 	if (!options.port || !options.dir) {
-		console.error('Your custom config file ', program.config, ' need setting port and dir');
+		Log.error('Your custom config file ', program.config, ' need setting port and dir');
 		error = true;
 	}
 } else if (moduleAvailable(defConf)) {
 	options = require(defConf); // eslint-disable-line
 	if (!options.port || !options.dir) {
-		console.error('qls.config.js need setting port and dir');
+		Log.error('qls.config.js need setting port and dir');
 		error = true;
 	}
 } else {

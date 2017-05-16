@@ -1,3 +1,5 @@
+process.env['QLS_ENV'] = 'mocha_test';
+
 var QLS = require('../index.js');
 
 var expect = require('chai').expect,
@@ -39,7 +41,7 @@ describe("quick local service", function() {
 });
 
 describe("quick local service proxy",function(){
-	
+
 	it("QLS().run() with proxy should proxy the post request", function(done) {
 		var proxyPort = autoPort.getPort(),
 			serverPort = autoPort.getPort();
@@ -56,7 +58,7 @@ describe("quick local service proxy",function(){
 
 		var interface = new Promise(function(resolve,reject){
 			app.listen(proxyPort, function(){
-				console.log('proxy server start:'+proxyPort);
+				//console.log('proxy server start:'+proxyPort);
 				resolve();
 			});
 		});
@@ -99,7 +101,7 @@ describe("quick local service proxy",function(){
 
 		var interface = new Promise(function(resolve,reject){
 			app.listen(proxyPort, function(){
-				console.log('proxy server start:'+proxyPort);
+				//console.log('proxy server start:'+proxyPort);
 				resolve();
 			});
 		});

@@ -2,6 +2,7 @@ const app = require('koa')();
 const serve = require('koa-static');
 const router = require('koa-router')();
 const proxy = require('koa-proxy');
+const Log = require('./util/log');
 
 const prPortOccupied = require('./util/portOccupyPromise');
 
@@ -26,7 +27,7 @@ QLS.prototype.run = function (option) {
 	var ctx = this;
 
 	if (!option) {
-		console.error('Option required!');
+		Log.error('Option required!');
 		return;
 	}
 
@@ -59,7 +60,7 @@ QLS.prototype.run = function (option) {
 					" }"].join('\n');
 
 				if(!option.proxy[urlPrefix].host || !option.proxy[urlPrefix].pathRewrite){
-					console.warn('Proxy warnning: Option proxy need sub option of host and pathRewrite. e.g.\n',proxyExample);
+					Log.warn('Proxy warnning: Option proxy need sub option of host and pathRewrite. e.g.\n',proxyExample);
 					continue;
 				}
 
@@ -108,13 +109,13 @@ QLS.prototype.run = function (option) {
 		// serve static file
 		app.use(serve(option.dir));
 		app.listen(option.port, function () {
-			console.log(`service started\n port: ${option.port} , dir:${option.dir}`);
+			Log.log(`service started\n port: ${option.port} , dir:${option.dir}`);
 			if(option.cbk && typeof option.cbk == 'function'){
 				option.cbk.call(ctx, app);
 			}
 		});
 	},function(res){
-		res.status && console.error(res.desc);
+		res.status && Log.error(res.desc);
 	});
 };
 

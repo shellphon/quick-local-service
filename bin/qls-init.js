@@ -1,5 +1,7 @@
 const path = require('path');
 const fs = require('fs');
+const Log = require('../util/log');
+
 // const program = require('commander');
 
 const cwd = process.cwd();
@@ -17,8 +19,8 @@ fs.writeFile(defConf, `module.exports = {
 	proxy:{}
 }`, function (err) {
 	if (err) {
-		console.error(err);
+		Log.error(err);
 		return;
 	}
-	console.log(defConf, ' generated');
+	Log.log(defConf, ' generated');
 });
