@@ -25,7 +25,7 @@ default port: 10086
 
 You can set the port by option `-p 8989`. 
 
-Also, you can set the dir by potion `-d demo`.
+Also, you can set the dir by option `-d demo`.
 
 ```bash
 $ cd demo
